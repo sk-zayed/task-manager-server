@@ -15,6 +15,6 @@ app.use(function(req, res, next) {
     res.sendFile(path.jon(process.cwd(), "public", "index.html"));
 })
 
-app.listen(process.env.POST, () => {
+app.listen(process.env.PORT, () => {
     console.log(`started on ${process.env.PORT}!!`);
 });
