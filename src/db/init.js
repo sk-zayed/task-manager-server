@@ -5,7 +5,7 @@ mongoose.set("returnOriginal",false);
 mongoose.set("runValidators", true);
 
 //creating models
-// require("../models/Users");
+require("../models/Users");
 // require("../models/Boards");
 // require("../models/Card");
 

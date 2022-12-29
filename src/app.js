@@ -5,15 +5,29 @@ const {connect} = require("./db/init");
 
 const app = express();
 
+app.use(express.json());
+app.use(express.urlencoded({extended: false}));
+
 app.use(express.static(path.join(process.cwd(), "public")));
 
-app.use("/api", (req, res) => {
-    res.end("Helluu!!");
-});
+app.use("/api", require("./routes/index.routes"));
+app.use("/auth", require("./routes/auth.routes"));
+app.use("/boards", require("./routes/board.routes"));
 
 app.use(function(req, res, next) {
-    res.sendFile(path.jon(process.cwd(), "public", "index.html"));
+    res.sendFile(path.join(process.cwd(), "public", "index.html"));
 });
+
+
+// error handling middleware
+app.use(require("./middlewares/errors").resourcenNotFound);
+app.use(require("./middlewares/errors").errorHandler);
+    // const {Errors} = require("../constants");
+    // const error = new Error(`__error message here__`);
+    // error.name = Errors.__errorName__;
+    // next(error);
+    // catch(error){next(error);}
+    // return;
 
 connect()
     .then(() => {
