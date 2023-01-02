@@ -22,6 +22,7 @@ const register = async (req, res, next) => {
             data: userObj,
         });
     } catch (error) {
+        console.log("now --> ", error);
         return next(error);
     }
 };
@@ -47,6 +48,7 @@ const login = async (req, res, next) => {
         }
 
         const claims = {
+            name: user.name,
             email: user.email,
             role: user.role
         };
@@ -55,6 +57,7 @@ const login = async (req, res, next) => {
             res.status(201).json({
                 status: "success",
                 data: {
+                    name: user.name,
                     email: user.email,
                     role: user.role,
                     token: token

@@ -28,7 +28,6 @@ userSchema.path("password").validate(function(value){
 });
 
 const SALT_FACTOR = 10;
-console.log("this -->", this);
 
 // pre hook
 userSchema.pre("save", function(done) {

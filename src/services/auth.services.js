@@ -13,8 +13,8 @@ const validateUser = async (userDetails) => {
 
     if (!user) return null;
 
-    const isValid = bcrypt.compare(userDetails.password, user.password);
-
+    const isValid = await bcrypt.compare(userDetails.password, user.password);
+    console.log("vali -> ", isValid);
     if(!isValid) return null;
 
     return user;

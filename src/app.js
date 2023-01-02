@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const path = require("path");
+const cors = require("cors");
 const {connect} = require("./db/init");
 
 const app = express();
@@ -10,9 +11,14 @@ app.use(express.urlencoded({extended: false}));
 
 app.use(express.static(path.join(process.cwd(), "public")));
 
+// setup CORS
+app.use( cors({
+    origin: 'http://localhost:3001',
+}));
+
 app.use("/api", require("./routes/index.routes"));
-app.use("/auth", require("./routes/auth.routes"));
-app.use("/boards", require("./routes/board.routes"));
+app.use("/api/auth", require("./routes/auth.routes"));
+app.use("/api/boards", require("./routes/board.routes"));
 
 app.use(function(req, res, next) {
     res.sendFile(path.join(process.cwd(), "public", "index.html"));
