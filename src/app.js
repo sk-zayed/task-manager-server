@@ -44,3 +44,5 @@ connect()
     .catch(error => {
         process.exit(1)
     });
+
+// require("./models/test");

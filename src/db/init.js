@@ -6,8 +6,8 @@ mongoose.set("runValidators", true);
 
 //creating models
 require("../models/Users");
-// require("../models/Boards");
-// require("../models/Card");
+require("../models/Boards");
+require("../models/Cards");
 
 const {DB_USER, DB_HOST, DB_NAME, DB_PASS} = process.env;
 
