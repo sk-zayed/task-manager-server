@@ -38,7 +38,6 @@ const login = async (req, res, next) => {
 
     try {
         const user = await AuthServices.validateUser(req.body);
-
         if(!user) {
             const error = new Error(
                 "Invalid credentials"

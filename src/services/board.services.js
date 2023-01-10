@@ -1,49 +1,49 @@
 const mongoose = require("mongoose");
-const Board = mongoose.model("Board");
-const Card = mongoose.model("Card");
+const Boards = mongoose.model("Board");
+const Cards = mongoose.model("Card");
 
 const createBoard = (boardDetails) => {
-    return Board.create(boardDetails);
+    return Boards.create(boardDetails);
 };
 
 const getBoards = (userId) => {
-    return Board.find({ owner: userId }).populate("cards");
+    return Boards.find({ owner: userId }).populate("cards");
 };
 
 const likeBoard = (boardId, liked) => {
-    return Board.updateOne({ _id: boardId }, { liked: !liked });
+    return Boards.updateOne({ _id: boardId }, { liked: !liked });
 };
 
 const getBoardById = (boardId) => {
-    return Board.findById(boardId).populate("cards");
+    return Boards.findById(boardId).populate("cards");
 };
 
 const createCard = (cardDetails) => {
-    return Card.create(cardDetails);
+    return Cards.create(cardDetails);
 };
 
 const findCard = (cardData) => {
-    return Card.find(cardData);
+    return Cards.find(cardData);
 };
 
 const updateCard = (cardData) => {
-    return Card.findByIdAndUpdate(cardData._id, cardData, { new: true });
+    return Cards.findByIdAndUpdate(cardData._id, cardData, { new: true });
 };
 
 const deleteBoard = (boardId) => {
-    return Board.deleteOne({ _id: boardId });
+    return Boards.deleteOne({ _id: boardId });
 };
 
 const deleteCardsOfBoard = (boardId) => {
-    return Card.deleteMany({ board: boardId });
+    return Cards.deleteMany({ board: boardId });
 };
 
 const deleteCard = (cardId) => {
-    return Card.deleteOne({ _id: cardId });
+    return Cards.deleteOne({ _id: cardId });
 };
 
 const deleteCardFromBoard = (cardId) => {
-    return Board.updateOne(
+    return Boards.updateOne(
         { cards: { $in: cardId } },
         { $pull: { cards: cardId } }
     );

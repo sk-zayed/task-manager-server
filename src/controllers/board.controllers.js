@@ -84,7 +84,6 @@ const getBoardById = async (req, res, next) => {
             total: board.cards.length,
             progress: (completedCards / board.cards.length) * 100,
         };
-        console.log(response);
         res.status(200).json({
             status: "success",
             data: response,
@@ -164,7 +163,6 @@ const updateCard = async (req, res, next) => {
 };
 
 const deleteBoard = async (req, res, next) => {
-    console.log("deleteBoard ctrls --> ", req);
     try {
         const response = await BoardServices.deleteBoard(req.params.id);
         if (response.acknowledged) {

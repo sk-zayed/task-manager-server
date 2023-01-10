@@ -33,14 +33,9 @@ cardSchema.virtual("progress").get(function () {
 });
 
 cardSchema.post("save", async function (doc) {
-    console.log("doc --> ", doc);
+    // console.log("doc --> ", doc);
     // this.completed = this.tasks.filter((task) => task.done === true).length;
     await Board.updateOne({ _id: doc.board }, { $push: { cards: doc } });
-});
-
-cardSchema.pre("update", async function (doc) {
-    console.log("up --> ", doc);
-    this.completed = this.tasks.filter((task) => task.done === true).length;
 });
 
 mongoose.model("Card", cardSchema);

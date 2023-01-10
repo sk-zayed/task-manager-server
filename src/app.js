@@ -19,6 +19,7 @@ app.use( cors({
 app.use("/api", require("./routes/index.routes"));
 app.use("/api/auth", require("./routes/auth.routes"));
 app.use("/api/boards", require("./routes/board.routes"));
+app.use("/api/calendar", require("./routes/calendar.routes"));
 
 app.use(function(req, res, next) {
     res.sendFile(path.join(process.cwd(), "public", "index.html"));
