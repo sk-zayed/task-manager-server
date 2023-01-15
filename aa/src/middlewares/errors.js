@@ -1,4 +1,4 @@
-const { Errors } = require("../constants");
+const {Errors} = require("../constants");
 
 const resourcenNotFound = (req, res, next) => {
     const error = new Error("API not supported");
@@ -14,16 +14,16 @@ const errorHandler = (err, req, res, next) => {
         [Errors.Forbidden]: 403,
         [Errors.NotFound]: 404,
         [Errors.MongoServerError]: 500,
-        [Errors.InternalServerError]: 500,
-    };
+        [Errors.InternalServerError]: 500
+    }
 
     return res.status(Status[err.name] || 500).json({
         status: "error",
-        message: err.message,
+        message: err.message
     });
 };
 
 module.exports = {
     resourcenNotFound,
-    errorHandler,
+    errorHandler
 };

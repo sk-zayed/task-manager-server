@@ -17,9 +17,11 @@ const authenticate = (req, res, next) => {
 
 const authorize = (...roles) => {
     return (req, res, next) => {
-        const { role } = res.locals.claims;
-        if (!roles.includes(role)) {
-            const error = new Error("You don't have sufficient privileges");
+        const {role} = res.locals.claims;
+        if(!roles.includes(role)) {
+            const error = new Error(
+                "You don't have sufficient privileges"
+            );
             error.name = Errors.Forbidden;
             return next(error);
         }
@@ -30,5 +32,5 @@ const authorize = (...roles) => {
 
 module.exports = {
     authenticate,
-    authorize,
+    authorize
 };

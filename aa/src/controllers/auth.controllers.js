@@ -27,7 +27,7 @@ const register = async (req, res, next) => {
 };
 
 const login = async (req, res, next) => {
-    if (Object.keys(req.body).length === 0) {
+    if(Object.keys(req.body).length === 0) {
         const error = new Error(
             "Request body is empty and need to have users' details!"
         );
@@ -37,8 +37,10 @@ const login = async (req, res, next) => {
 
     try {
         const user = await AuthServices.validateUser(req.body);
-        if (!user) {
-            const error = new Error("Invalid credentials");
+        if(!user) {
+            const error = new Error(
+                "Invalid credentials"
+            );
             error.name = Errors.UnAuthorized;
             return next(error);
         }
@@ -47,26 +49,25 @@ const login = async (req, res, next) => {
             user: user._id,
             name: user.name,
             email: user.email,
-            role: user.role,
+            role: user.role
         };
 
-        jwt.sign(
-            claims,
-            process.env.JWT_SECRET_KEY,
-            /*{expiresIn: "7d"},*/ (err, token) => {
-                res.status(201).json({
-                    status: "success",
-                    data: {
-                        name: user.name,
-                        email: user.email,
-                        role: user.role,
-                        token: token,
-                    },
-                });
-            }
+        jwt.sign(claims, process.env.JWT_SECRET_KEY, /*{expiresIn: "7d"},*/ (err, token) => {
+            res.status(201).json({
+                status: "success",
+                data: {
+                    name: user.name,
+                    email: user.email,
+                    role: user.role,
+                    token: token
+                }
+            });
+        });
+
+    } catch(error) {
+        const err = new Error(
+            "Something went wrong during authorization."
         );
-    } catch (error) {
-        const err = new Error("Something went wrong during authorization.");
         err.name = Errors.InternalServerError;
         return next(err);
     }
@@ -74,5 +75,5 @@ const login = async (req, res, next) => {
 
 module.exports = {
     register,
-    login,
+    login
 };

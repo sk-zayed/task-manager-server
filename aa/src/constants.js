@@ -5,9 +5,9 @@ const Errors = {
     MongoServerError: "MongoServerError",
     UnAuthorized: "UnAuthorized",
     InternalServerError: "InternalServerError",
-    Forbidden: "Forbidden",
+    Forbidden: "Forbidden"
 };
 
 module.exports = {
-    Errors,
+    Errors
 };

@@ -27,18 +27,18 @@ const boardSchema = new mongoose.Schema(
         ],
         liked: {
             type: Boolean,
-            default: false,
+            default: false
         },
         members: [
             {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: "User",
-            },
+                ref: "User"
+            }
         ],
         completed: {
             type: Number,
-            default: 0,
-        },
+            default: 0
+        }
     },
     {
         toJSON: { virtuals: true },
@@ -48,6 +48,6 @@ const boardSchema = new mongoose.Schema(
 
 boardSchema.virtual("progress").get(function () {
     return (this.completed / this.cards.length) * 100;
-});
+})
 
 mongoose.model("Board", boardSchema);

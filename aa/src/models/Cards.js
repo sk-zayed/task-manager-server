@@ -19,13 +19,14 @@ const cardSchema = new mongoose.Schema(
         priority: String,
         dueDate: Date,
         tasks: Array,
-        completed: Number,
+        completed: Number
     },
     {
         toJSON: { virtuals: true },
         toObject: { virtuals: true },
     }
 );
+
 
 cardSchema.virtual("progress").get(function () {
     return (this.completed / this.tasks.length) * 100;

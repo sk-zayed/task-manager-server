@@ -45,12 +45,10 @@ const getMyBoards = async (req, res, next) => {
 
 const getTeamsBoards = async (req, res, next) => {
     try {
-        const response = await BoardServices.getTeamsBoards(
-            res.locals.claims.user
-        );
+        const response = await BoardServices.getTeamsBoards(res.locals.claims.user);
         res.status(200).json({
             status: "success",
-            data: response,
+            data: response
         });
     } catch (error) {
         console.log("getTeamsBoards ctrls --> ", error);
@@ -78,18 +76,6 @@ const likeBoard = async (req, res, next) => {
 const getBoardById = async (req, res, next) => {
     try {
         const response = await BoardServices.getBoardById(req.params.id);
-        let isMember = false;
-        for (let i in response.members) {
-            if (response.members[i].email === res.locals.claims.email) {
-                isMember = true;
-                break;
-            }
-        }
-        if (!(response.owner.email === res.locals.claims.email) && !isMember) {
-            const error = new Error();
-            error.name = Errors.BadRequest;
-            return next(error);
-        }
         res.status(200).json({
             status: "success",
             data: response,
@@ -135,7 +121,7 @@ const createCard = async (req, res, next) => {
         const response = await BoardServices.createCard(cardData);
 
         const board = await BoardServices.getBoardById(cardData.board);
-        completedCards = board.cards.filter((card) => card.progress === 100);
+        completedCards = board.cards.filter(card => card.progress === 100);
         await BoardServices.updateBoard(cardData.board, completedCards.length);
 
         res.status(201).json({
@@ -193,11 +179,8 @@ const updateCard = async (req, res, next) => {
         const updatedCard = await BoardServices.updateCard(cardData);
 
         const board = await BoardServices.getBoardById(updatedCard.board);
-        completedCards = board.cards.filter((card) => card.progress === 100);
-        await BoardServices.updateBoard(
-            updatedCard.board,
-            completedCards.length
-        );
+        completedCards = board.cards.filter(card => card.progress === 100);
+        await BoardServices.updateBoard(updatedCard.board, completedCards.length);
 
         res.status(200).json({
             status: "success",
@@ -228,9 +211,9 @@ const deleteBoard = async (req, res, next) => {
 const deleteCard = async (req, res, next) => {
     try {
         const board = await BoardServices.getBoardByCardId(req.params.id);
-        completedCards = board.cards.filter((card) => card.progress === 100);
+        completedCards = board.cards.filter(card => card.progress === 100);
         await BoardServices.updateBoard(board._id, completedCards.length);
-
+        
         await BoardServices.deleteCardFromBoard(req.params.id);
 
         const response = await BoardServices.deleteCard(req.params.id);
@@ -249,40 +232,29 @@ const addMember = async (req, res, next) => {
     try {
         const member = await AuthServices.getUserByEmail(req.body.memberEmail);
         if (!member) {
-            const error = new Error(
-                `Ask ${req.body.memberEmail} to register on TaskManager!`
-            );
+            const error = new Error(`Ask ${req.body.memberEmail} to register on TaskManager!`);
             error.name = Errors.NotFound;
             return next(error);
         }
 
-        const isOwner = await BoardServices.isOwner(
-            req.body.boardId,
-            member._id
-        );
+        const isOwner = await BoardServices.isOwner(req.body.boardId, member._id);
         if (isOwner.length > 0) {
             const error = new Error("You are the owner of the board");
             error.name = Errors.BadRequest;
             return next(error);
         }
 
-        const alreadyInMembers = await BoardServices.alreadyInMembers(
-            req.body.boardId,
-            member._id
-        );
+        const alreadyInMembers = await BoardServices.alreadyInMembers(req.body.boardId, member._id);
         if (alreadyInMembers.length > 0) {
             const error = new Error("Member is already there!");
             error.name = Errors.BadRequest;
             return next(error);
         }
 
-        const response = await BoardServices.addMember(
-            req.body.boardId,
-            member
-        );
+        const response = await BoardServices.addMember(req.body.boardId, member);
         res.status(200).json({
             status: "success",
-            data: response,
+            data: response
         });
     } catch (error) {
         console.log("addMember ctrls --> ", error);
@@ -292,13 +264,10 @@ const addMember = async (req, res, next) => {
 
 const removeMember = async (req, res, next) => {
     try {
-        const response = await BoardServices.removeMember(
-            req.body.boardId,
-            req.body.userId
-        );
+        const response = await BoardServices.removeMember(req.body.boardId, req.body.userId);
         res.status(200).json({
             status: "success",
-            data: response,
+            data: response
         });
     } catch (error) {
         console.log("removeMember ctrls --> ", error);
@@ -317,5 +286,5 @@ module.exports = {
     deleteBoard,
     deleteCard,
     addMember,
-    removeMember,
+    removeMember
 };

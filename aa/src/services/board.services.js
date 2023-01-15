@@ -6,12 +6,8 @@ const createBoard = (boardDetails) => {
     return Boards.create(boardDetails);
 };
 
-const getMyBoards = (userId) => {
+const getBoards = (userId) => {
     return Boards.find({ owner: userId }).populate("cards").populate("members");
-};
-
-const getTeamsBoards = (userId) => {
-    return Boards.find({ members: userId }).populate("owner");
 };
 
 const likeBoard = (boardId, liked) => {
@@ -19,10 +15,7 @@ const likeBoard = (boardId, liked) => {
 };
 
 const getBoardById = (boardId) => {
-    return Boards.findById(boardId)
-        .populate("owner")
-        .populate("cards")
-        .populate("members");
+    return Boards.findById(boardId).populate("cards").populate("members");
 };
 
 const createCard = (cardDetails) => {
@@ -34,15 +27,7 @@ const getCard = (cardData) => {
 };
 
 const updateCard = (cardData) => {
-    return Cards.findByIdAndUpdate(cardData._id, cardData);
-};
-
-const getBoardByCardId = (cardId) => {
-    return Boards.findOne({ cards: { $in: cardId } });
-};
-
-const updateBoard = (boardId, num) => {
-    return Boards.findByIdAndUpdate(boardId, { completed: num });
+    return Cards.findByIdAndUpdate(cardData._id, cardData, { new: true });
 };
 
 const deleteBoard = (boardId) => {
@@ -64,6 +49,21 @@ const deleteCardFromBoard = (cardId) => {
     );
 };
 
+// const alreadyInMembers = (userId) => {
+//     return Boards.find({
+//         $or: [
+//             {
+//                 owner: userId
+//             },
+//             {
+//                 $in: {
+//                     memers: userId
+//                 }
+//             }
+//         ]
+//     })
+// };
+
 const isOwner = (boardId, userId) => {
     return Boards.find({ _id: boardId, owner: userId });
 };
@@ -71,7 +71,7 @@ const isOwner = (boardId, userId) => {
 const alreadyInMembers = (boardId, userId) => {
     return Boards.find({
         _id: boardId,
-        members: userId,
+        members: userId
     });
 };
 
@@ -86,14 +86,11 @@ const removeMember = (boardId, userId) => {
 module.exports = {
     createBoard,
     likeBoard,
-    getMyBoards,
-    getTeamsBoards,
+    getBoards,
     getBoardById,
     createCard,
     getCard,
     updateCard,
-    getBoardByCardId,
-    updateBoard,
     deleteCard,
     deleteBoard,
     deleteCardsOfBoard,

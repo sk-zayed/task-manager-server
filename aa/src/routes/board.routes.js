@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const BoardCtrls = require("../controllers/board.controllers");
-const { authenticate, authorize } = require("../middlewares/auth");
+const {authenticate, authorize} = require("../middlewares/auth");
 
 router.get("/getmyboards", authenticate, BoardCtrls.getMyBoards);
 router.get("/getteamsboards", authenticate, BoardCtrls.getTeamsBoards);
