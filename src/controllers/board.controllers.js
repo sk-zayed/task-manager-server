@@ -79,13 +79,14 @@ const getBoardById = async (req, res, next) => {
     try {
         const response = await BoardServices.getBoardById(req.params.id);
         let isMember = false;
+        const isOwner = response.owner.email === res.locals.claims.email;
         for (let i in response.members) {
             if (response.members[i].email === res.locals.claims.email) {
                 isMember = true;
                 break;
             }
         }
-        if (!(response.owner.email === res.locals.claims.email) && !isMember) {
+        if (!isOwner && !isMember) {
             const error = new Error();
             error.name = Errors.BadRequest;
             return next(error);
@@ -93,6 +94,7 @@ const getBoardById = async (req, res, next) => {
         res.status(200).json({
             status: "success",
             data: response,
+            isOwner: isOwner,
         });
     } catch (error) {
         console.log("getBoardById ctrls --> ", error);
@@ -294,7 +296,7 @@ const removeMember = async (req, res, next) => {
     try {
         const response = await BoardServices.removeMember(
             req.body.boardId,
-            req.body.userId
+            req.body.userId ? req.body.userId : res.locals.claims.user
         );
         res.status(200).json({
             status: "success",
