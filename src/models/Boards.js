@@ -25,14 +25,16 @@ const boardSchema = new mongoose.Schema(
                 ref: "Card",
             },
         ],
-        liked: {
-            type: Boolean,
-            default: false,
-        },
         members: [
             {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "User",
+            },
+        ],
+        likedBy: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "User"
             },
         ],
         completed: {

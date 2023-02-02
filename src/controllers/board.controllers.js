@@ -60,11 +60,20 @@ const getTeamsBoards = async (req, res, next) => {
 
 const likeBoard = async (req, res, next) => {
     try {
-        const liked = await BoardServices.getBoardById(req.params.id);
-        const response = await BoardServices.likeBoard(
-            req.params.id,
-            liked.liked
-        );
+        let liked = false;
+        let response = {};
+        const board = await BoardServices.getBoardById(req.params.id);
+        for (let i in board.likedBy) {
+            if (board.likedBy[i].toString() === res.locals.claims.user) {
+                liked = true;
+                break;
+            }
+        }
+        if(!liked){
+            response = await BoardServices.likeBoard(req.params.id, res.locals.claims.user);
+        } else {
+            response = await BoardServices.unLikeBoard(req.params.id, res.locals.claims.user);    
+        }
         res.status(200).json({
             status: "success",
             data: response,
@@ -79,7 +88,7 @@ const getBoardById = async (req, res, next) => {
     try {
         const response = await BoardServices.getBoardById(req.params.id);
         let isMember = false;
-        const isOwner = response.owner.email === res.locals.claims.email;
+        const isOwner = response.owner.toString() === res.locals.claims.user;
         for (let i in response.members) {
             if (response.members[i].email === res.locals.claims.email) {
                 isMember = true;

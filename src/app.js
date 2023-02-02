@@ -39,7 +39,7 @@ app.use(require("./middlewares/errors").errorHandler);
 connect()
     .then(() => {
         app.listen(process.env.PORT, () => {
-            console.log(`started on ${process.env.PORT}!!`);
+            console.log(`server started!!`);
         });
     })
     .catch((error) => {

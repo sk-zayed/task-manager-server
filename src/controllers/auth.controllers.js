@@ -57,9 +57,7 @@ const login = async (req, res, next) => {
                 res.status(201).json({
                     status: "success",
                     data: {
-                        name: user.name,
-                        email: user.email,
-                        role: user.role,
+                        ...claims,
                         token: token,
                     },
                 });

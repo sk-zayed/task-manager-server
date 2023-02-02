@@ -14,13 +14,16 @@ const getTeamsBoards = (userId) => {
     return Boards.find({ members: userId }).populate("owner");
 };
 
-const likeBoard = (boardId, liked) => {
-    return Boards.updateOne({ _id: boardId }, { liked: !liked });
+const likeBoard = (boardId, userId) => {
+    return Boards.updateOne({ _id: boardId }, { $addToSet: {likedBy: userId} });
+};
+
+const unLikeBoard = (boardId, userId) => {
+    return Boards.updateOne({ _id: boardId }, { $pull: {likedBy: userId} });
 };
 
 const getBoardById = (boardId) => {
     return Boards.findById(boardId)
-        .populate("owner")
         .populate("cards")
         .populate("members");
 };
@@ -86,6 +89,7 @@ const removeMember = (boardId, userId) => {
 module.exports = {
     createBoard,
     likeBoard,
+    unLikeBoard,
     getMyBoards,
     getTeamsBoards,
     getBoardById,
