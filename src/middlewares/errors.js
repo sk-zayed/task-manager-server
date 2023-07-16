@@ -2,7 +2,7 @@ const { Errors } = require("../constants");
 
 const resourcenNotFound = (req, res, next) => {
     const error = new Error("API not supported");
-    error.name = errors.NotFound;
+    error.name = Errors.NotFound;
     next(error);
 };
 

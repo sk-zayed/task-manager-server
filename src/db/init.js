@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 //global configuration for queries
 mongoose.set("returnOriginal", false);
 mongoose.set("runValidators", true);
+mongoose.set("strictPopulate", false);
 
 //creating models
 require("../models/Users");

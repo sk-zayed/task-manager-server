@@ -3,6 +3,8 @@ const express = require("express");
 const path = require("path");
 const cors = require("cors");
 const { connect } = require("./db/init");
+const cron = require("node-cron");
+const axios = require("axios");
 
 const app = express();
 
@@ -29,17 +31,14 @@ app.use(function (req, res, next) {
 // error handling middleware
 app.use(require("./middlewares/errors").resourcenNotFound);
 app.use(require("./middlewares/errors").errorHandler);
-// const {Errors} = require("../constants");
-// const error = new Error(`__error message here__`);
-// error.name = Errors.__errorName__;
-// next(error);
-// catch(error){next(error);}
-// return;
 
 connect()
     .then(() => {
         app.listen(process.env.PORT, () => {
             console.log(`server started!!`);
+            cron.schedule("0 0 0 * * *", () => {
+                axios.get(`${process.env.BASE_URL}/api/calendar/notify-deadline`);
+            });
         });
     })
     .catch((error) => {
